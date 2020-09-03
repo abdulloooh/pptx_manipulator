@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
   return res.end();
 });
 
-router.post("/fileupload", (req, res, next) => {
+router.post("/fileupload", async (req, res, next) => {
   const form = new formidable.IncomingForm();
   form.parse(req, function (err, fields, files) {
     var oldpath = files.filetoupload.path;
@@ -24,15 +24,19 @@ router.post("/fileupload", (req, res, next) => {
     const fileName = realFile.slice(0, realFile.lastIndexOf(".ppt"));
     const fileExtension = realFile.slice(realFile.lastIndexOf(".ppt"));
 
-    fs.rename(oldpath, newpath, function (err) {
+    fs.rename(oldpath, newpath, async function (err) {
       if (err) {
         console.log(err.message);
         res.sendStatus(500);
       }
-      processing([fileName, fileExtension]);
+      req.fileDetails = [fileName, fileExtension];
+      // processing([fileName, fileExtension]);
+      const locationArray = await processing(
+        [fileName, fileExtension],
+        req.url
+      );
 
-      res.write("File uploaded and moved!");
-      res.end();
+      res.send(locationArray);
     });
   });
 });

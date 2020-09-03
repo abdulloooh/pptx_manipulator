@@ -8,19 +8,20 @@ const {
 const tempStorage = "cloneFiles";
 const resultDirectory = "results";
 
-module.exports = function ([fileName, fileExtension]) {
-  cleanDirectory(resultDirectory, fileExtension);
+module.exports = function ([fileName, fileExtension], url) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      cleanDirectory(resultDirectory, fileExtension);
 
-  getTotalNumberOfSlides(fileName, fileExtension).then((n) => {
-    createMultipleFiles(tempStorage, fileName, n, fileExtension)
-      .then((n) =>
-        manipulate(n, fileName, fileExtension).then(() => {
-          console.log("done");
-          cleanDirectory(tempStorage);
-        })
-      )
-      .catch((err) => {
-        console.log("error:", err.message);
-      });
+      let n = await getTotalNumberOfSlides(fileName, fileExtension);
+      n = await createMultipleFiles(tempStorage, fileName, n, fileExtension);
+      const locationArray = await manipulate(n, fileName, fileExtension, url);
+      if (locationArray) {
+        cleanDirectory(tempStorage);
+        resolve(locationArray);
+      }
+    } catch (ex) {
+      throw ex;
+    }
   });
 };

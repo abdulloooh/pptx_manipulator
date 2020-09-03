@@ -1,4 +1,5 @@
 const PPTX = require("nodejs-pptx");
+const os = require("os");
 const fs = require("fs");
 const path = require("path");
 const tempStorage = "cloneFiles";
@@ -18,7 +19,7 @@ async function createMultipleFiles(folder, fileName, n, fileExtension) {
   return n;
 }
 
-async function manipulate(n, file, fileExtension) {
+async function manipulate(n, file, fileExtension, urL) {
   const locationArray = [];
 
   for (let fileCount = 1; fileCount <= n; fileCount++) {
@@ -42,9 +43,9 @@ async function manipulate(n, file, fileExtension) {
       slideCount = slideCount + 1;
     }
     if (foundSomething) {
-      const saveDir = `./${resultDirectory}/${file}${fileCount}${fileExtension}`;
-      await pptx.save(`${saveDir}`);
-      locationArray.push(saveDir);
+      const filePath = `${file}${fileCount}${fileExtension}`;
+      await pptx.save(`./${resultDirectory}/${filePath}`);
+      locationArray.push(process.env.BASE_URL + "/" + filePath);
     }
   }
   return locationArray;
