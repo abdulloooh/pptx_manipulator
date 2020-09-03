@@ -4,12 +4,12 @@ const path = require("path");
 const tempStorage = "cloneFiles";
 const resultDirectory = "results";
 
-async function createMultipleFiles(folder, fileName, n) {
+async function createMultipleFiles(folder, fileName, n, fileExtension) {
   const directory = folder + "/";
   for (let i = 1; i <= n; i++) {
     fs.copyFile(
-      fileName + ".pptx",
-      directory + fileName + i + ".pptx",
+      fileName + fileExtension,
+      directory + fileName + i + fileExtension,
       (err) => {
         if (err) console.log(err.message);
       }
@@ -18,10 +18,10 @@ async function createMultipleFiles(folder, fileName, n) {
   return n;
 }
 
-async function manipulate(n, file) {
+async function manipulate(n, file, fileExtension) {
   for (let fileCount = 1; fileCount <= n; fileCount++) {
     let pptx = new PPTX.Composer();
-    await pptx.load(`./${tempStorage}/${file}${fileCount}.pptx`);
+    await pptx.load(`./${tempStorage}/${file}${fileCount}${fileExtension}`);
     let slideCount = 1,
       foundSomething = false;
     while (slideCount) {
@@ -40,19 +40,22 @@ async function manipulate(n, file) {
       slideCount = slideCount + 1;
     }
     if (foundSomething)
-      await pptx.save(`./${resultDirectory}/${file}${fileCount}.pptx`);
+      await pptx.save(
+        `./${resultDirectory}/${file}${fileCount}${fileExtension}`
+      );
   }
 }
 
-async function getTotalNumberOfSlides(file) {
+async function getTotalNumberOfSlides(file, fileExtension) {
   //create a garbage copy
-  fs.copyFile(file + ".pptx", "./garbage/hold.pptx", (err) => {
+  const garbageDir = "./garbage/hold" + fileExtension;
+  fs.copyFile(file + fileExtension, garbageDir, (err) => {
     if (err) console.log(err.message);
   });
 
   //try to remove all files in it
   let pptx = new PPTX.Composer();
-  await pptx.load("./garbage/hold.pptx");
+  await pptx.load(garbageDir);
   let slideCount = 1;
   while (slideCount) {
     try {

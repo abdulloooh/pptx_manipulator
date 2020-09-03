@@ -8,18 +8,13 @@ const {
 const tempStorage = "cloneFiles";
 const resultDirectory = "results";
 
-module.exports = function (file, req, res) {
-  console.log(file);
-  res.write("File uploaded and moved!");
-  res.end();
+module.exports = function ([fileName, fileExtension]) {
+  cleanDirectory(resultDirectory, fileExtension);
 
-  //clean result directory
-  cleanDirectory(resultDirectory);
-
-  getTotalNumberOfSlides(file).then((n) => {
-    createMultipleFiles(tempStorage, file, n)
+  getTotalNumberOfSlides(fileName, fileExtension).then((n) => {
+    createMultipleFiles(tempStorage, fileName, n, fileExtension)
       .then((n) =>
-        manipulate(n, file).then(() => {
+        manipulate(n, fileName, fileExtension).then(() => {
           console.log("done");
           cleanDirectory(tempStorage);
         })
@@ -28,6 +23,4 @@ module.exports = function (file, req, res) {
         console.log("error:", err.message);
       });
   });
-  res.write("File uploaded and moved!");
-  res.end();
 };
