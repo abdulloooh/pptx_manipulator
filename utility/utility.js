@@ -19,6 +19,8 @@ async function createMultipleFiles(folder, fileName, n, fileExtension) {
 }
 
 async function manipulate(n, file, fileExtension) {
+  const locationArray = [];
+
   for (let fileCount = 1; fileCount <= n; fileCount++) {
     let pptx = new PPTX.Composer();
     await pptx.load(`./${tempStorage}/${file}${fileCount}${fileExtension}`);
@@ -39,11 +41,13 @@ async function manipulate(n, file, fileExtension) {
       }
       slideCount = slideCount + 1;
     }
-    if (foundSomething)
-      await pptx.save(
-        `./${resultDirectory}/${file}${fileCount}${fileExtension}`
-      );
+    if (foundSomething) {
+      const saveDir = `./${resultDirectory}/${file}${fileCount}${fileExtension}`;
+      await pptx.save(`${saveDir}`);
+      locationArray.push(saveDir);
+    }
   }
+  return locationArray;
 }
 
 async function getTotalNumberOfSlides(file, fileExtension) {
