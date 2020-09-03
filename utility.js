@@ -1,7 +1,6 @@
 const PPTX = require("nodejs-pptx");
 const fs = require("fs");
 const path = require("path");
-let file = "Biochem";
 const tempStorage = "cloneFiles";
 const resultDirectory = "results";
 
@@ -19,7 +18,7 @@ async function createMultipleFiles(folder, fileName, n) {
   return n;
 }
 
-async function manipulate(n) {
+async function manipulate(n, file) {
   for (let fileCount = 1; fileCount <= n; fileCount++) {
     let pptx = new PPTX.Composer();
     await pptx.load(`./${tempStorage}/${file}${fileCount}.pptx`);
@@ -45,7 +44,7 @@ async function manipulate(n) {
   }
 }
 
-async function getTotalNumberOfSlides() {
+async function getTotalNumberOfSlides(file) {
   //create a garbage copy
   fs.copyFile(file + ".pptx", "./garbage/hold.pptx", (err) => {
     if (err) console.log(err.message);

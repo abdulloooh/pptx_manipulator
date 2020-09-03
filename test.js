@@ -12,10 +12,10 @@ let file = "Biochem";
 //clean result directory
 cleanDirectory(resultDirectory);
 
-getTotalNumberOfSlides().then((n) => {
+getTotalNumberOfSlides(file).then((n) => {
   createMultipleFiles(tempStorage, file, n)
     .then((n) =>
-      manipulate(n).then(() => {
+      manipulate(n, file).then(() => {
         console.log("done");
         cleanDirectory(tempStorage);
       })
