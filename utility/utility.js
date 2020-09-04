@@ -54,16 +54,22 @@ async function manipulate(n, file, fileExtension, urL) {
 
 async function getTotalNumberOfSlides(file, fileExtension) {
   //create a garbage copy
+  console.log("utility 1");
   const garbageDir = "./garbage/hold" + fileExtension;
+  console.log("utility 2");
   fs.copyFile(file + fileExtension, garbageDir, (err) => {
+    console.log("utility 3");
     if (err) console.log(err.message);
   });
-
+  console.log("utility 4");
   //try to remove all files in it
   let pptx = new PPTX.Composer();
+  console.log("utility 5");
   await pptx.load(garbageDir);
+  console.log("utility 6");
   let slideCount = 1;
   while (slideCount) {
+    console.log("utility 7");
     try {
       await pptx.compose((pres) => {
         pres.removeSlide(pres.getSlide(slideCount));
