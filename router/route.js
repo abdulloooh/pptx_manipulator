@@ -23,18 +23,19 @@ router.post("/fileupload", async (req, res, next) => {
     var newpath = "./" + realFile;
     const fileName = realFile.slice(0, realFile.lastIndexOf(".ppt"));
     const fileExtension = realFile.slice(realFile.lastIndexOf(".ppt"));
-
+    console.log(1);
     fs.copyFile(oldpath, newpath, async (err) => {
       if (err) {
         console.log(err.message);
         res.sendStatus(500);
       }
-
+      console.log(2);
       processing([fileName, fileExtension], req.url).then((locationArray) => {
+        console.log(3);
         fs.unlinkSync(newpath, (err) => {
           console.log(err.message);
         });
-
+        console.log(4);
         res.send(locationArray);
       });
     });
