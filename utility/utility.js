@@ -6,7 +6,6 @@ const tempStorage = "cloneFiles";
 const resultDirectory = "results";
 
 async function createMultipleFiles(folder, fileName, n, fileExtension) {
-  console.log("inner 2");
   const directory = folder + "/";
   for (let i = 1; i <= n; i++) {
     fs.copyFile(
