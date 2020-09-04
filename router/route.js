@@ -24,19 +24,19 @@ router.post("/fileupload", async (req, res, next) => {
     const fileName = realFile.slice(0, realFile.lastIndexOf(".ppt"));
     const fileExtension = realFile.slice(realFile.lastIndexOf(".ppt"));
 
-    fs.rename(oldpath, newpath, async function (err) {
+    fs.copyFile(oldpath, newpath, async (err) => {
       if (err) {
         console.log(err.message);
         res.sendStatus(500);
       }
-      req.fileDetails = [fileName, fileExtension];
-      // processing([fileName, fileExtension]);
-      const locationArray = await processing(
-        [fileName, fileExtension],
-        req.url
-      );
 
-      res.send(locationArray);
+      processing([fileName, fileExtension], req.url).then((locationArray) => {
+        fs.unlinkSync(newpath, (err) => {
+          console.log(err.message);
+        });
+
+        res.send(locationArray);
+      });
     });
   });
 });
