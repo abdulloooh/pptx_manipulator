@@ -31,11 +31,11 @@ router.post("/fileupload", async (req, res, next) => {
       }
       console.log(2);
       processing([fileName, fileExtension], req.url).then((locationArray) => {
-        console.log(3);
+        console.log(5);
         fs.unlinkSync(newpath, (err) => {
           console.log(err.message);
         });
-        console.log(4);
+        console.log(6);
         res.send(locationArray);
       });
     });

@@ -11,21 +11,22 @@ const resultDirectory = "results";
 module.exports = function ([fileName, fileExtension], url) {
   return new Promise(async (resolve, reject) => {
     console.log("inner 1");
-    try {
-      cleanDirectory(resultDirectory, fileExtension);
+
+    cleanDirectory(resultDirectory, fileExtension);
+    getTotalNumberOfSlides(fileName, fileExtension).then((n) => {
       console.log("inner 2");
-      let n = await getTotalNumberOfSlides(fileName, fileExtension);
-      console.log("inner 3");
-      n = await createMultipleFiles(tempStorage, fileName, n, fileExtension);
-      console.log("inner 4");
-      const locationArray = await manipulate(n, fileName, fileExtension, url);
-      if (locationArray) {
-        cleanDirectory(tempStorage);
-        resolve(locationArray);
-      }
-      console.log("inner 5");
-    } catch (ex) {
-      throw ex;
-    }
+      createMultipleFiles(tempStorage, fileName, n, fileExtension).then((n) => {
+        console.log("inner 3");
+        manipulate(n, fileName, fileExtension, url)
+          .then((locationArray) => {
+            console.log("inner 4");
+            cleanDirectory(tempStorage);
+            resolve(locationArray);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      });
+    });
   });
 };
