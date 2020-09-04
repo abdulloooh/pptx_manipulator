@@ -10,6 +10,7 @@ const resultDirectory = "results";
 
 module.exports = function ([fileName, fileExtension], url) {
   return new Promise(async (resolve, reject) => {
+    console.log("inner 1");
     try {
       cleanDirectory(resultDirectory, fileExtension);
 
@@ -20,6 +21,7 @@ module.exports = function ([fileName, fileExtension], url) {
         cleanDirectory(tempStorage);
         resolve(locationArray);
       }
+      console.log("inner 5");
     } catch (ex) {
       throw ex;
     }
