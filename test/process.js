@@ -4,7 +4,7 @@ function processForm() {
 
   formData.append("filetoupload", fileField.files[0]);
 
-  fetch("http://localhost:3000/fileupload", {
+  fetch("https://pptxmanipulator.herokuapp.com/fileupload", {
     method: "POST",
     body: formData,
   })
