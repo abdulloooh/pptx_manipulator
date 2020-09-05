@@ -67,6 +67,7 @@ async function getTotalNumberOfSlides(file, fileExtension) {
       if (err) {
         console.log(err.message);
         reject(err);
+        return;
       }
 
       pptx
