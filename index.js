@@ -4,7 +4,6 @@ const app = express();
 const cors = require("cors");
 
 const route = require("./router/route");
-console.log("here");
 require("./startup/error")();
 require("./startup/prod")(app);
 
