@@ -6,12 +6,6 @@ const path = require("path");
 const tempStorage = "cloneFiles";
 const resultDirectory = "results";
 
-async function createDirectories([dirArray]) {
-  for (let i = 0; i < dirArray; i++) {
-    await mkdir(dirArray[i]);
-  }
-}
-
 async function createMultipleFiles(folder, fileName, n, fileExtension) {
   const directory = folder + "/";
   for (let i = 1; i <= n; i++) {
@@ -23,7 +17,7 @@ async function createMultipleFiles(folder, fileName, n, fileExtension) {
       }
     );
   }
-  console.log("inner 3");
+
   return n;
 }
 
@@ -62,15 +56,13 @@ async function manipulate(n, file, fileExtension, urL) {
 async function getTotalNumberOfSlides(file, fileExtension) {
   return new Promise((resolve, reject) => {
     //create a garbage copy
-    console.log("utility 1");
+
     const garbageDir = "./garbage/hold" + fileExtension;
-    console.log("utility 2");
 
     //try to remove all files in it
     let pptx = new PPTX.Composer();
 
     fs.copyFile(file + fileExtension, garbageDir, async (err) => {
-      console.log("utility 3");
       if (err) {
         console.log(err.message);
         reject(err);
@@ -83,8 +75,6 @@ async function getTotalNumberOfSlides(file, fileExtension) {
           let slideCount = 1;
           while (slideCount) {
             try {
-              console.log("utility 4");
-
               await pptx.compose((pres) => {
                 pres.removeSlide(pres.getSlide(slideCount));
                 slideCount = slideCount + 1;
@@ -96,7 +86,7 @@ async function getTotalNumberOfSlides(file, fileExtension) {
             }
           }
         })
-        .catch((err) => console.log(err.message));
+        .catch((err) => reject(err));
     });
   });
 }
@@ -123,5 +113,4 @@ module.exports = {
   manipulate,
   getTotalNumberOfSlides,
   createMultipleFiles,
-  createDirectories,
 };
