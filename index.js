@@ -1,13 +1,15 @@
 const path = require("path");
 const express = require("express");
 const app = express();
+const cors = require("cors");
 
 const route = require("./router/route");
-
+console.log("here");
 require("./startup/error")();
 require("./startup/prod")(app);
 
 app.use(express.static(path.join(`${__dirname}/`, "results")));
+app.use(cors());
 
 app.use("/", route);
 
