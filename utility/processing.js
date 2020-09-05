@@ -1,5 +1,6 @@
 const {
   cleanDirectory,
+  createDirectories,
   manipulate,
   getTotalNumberOfSlides,
   createMultipleFiles,
@@ -15,17 +16,21 @@ module.exports = function ([fileName, fileExtension], url) {
     cleanDirectory(resultDirectory, fileExtension);
     getTotalNumberOfSlides(fileName, fileExtension).then((n) => {
       console.log("inner 2");
-      createMultipleFiles(tempStorage, fileName, n, fileExtension).then((n) => {
-        console.log("inner 3");
-        manipulate(n, fileName, fileExtension, url)
-          .then((locationArray) => {
-            console.log("inner 4");
-            cleanDirectory(tempStorage);
-            resolve(locationArray);
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });
+      createDirectories([tempStorage, resultDirectory, "garbage"]).then(() => {
+        createMultipleFiles(tempStorage, fileName, n, fileExtension).then(
+          (n) => {
+            console.log("inner 3");
+            manipulate(n, fileName, fileExtension, url)
+              .then((locationArray) => {
+                console.log("inner 4");
+                cleanDirectory(tempStorage);
+                resolve(locationArray);
+              })
+              .catch((err) => {
+                console.log(err.message);
+              });
+          }
+        );
       });
     });
   });

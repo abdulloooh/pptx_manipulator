@@ -1,9 +1,16 @@
 const PPTX = require("nodejs-pptx");
+const mkdir = require("mkdirp");
 const os = require("os");
 const fs = require("fs");
 const path = require("path");
 const tempStorage = "cloneFiles";
 const resultDirectory = "results";
+
+async function createDirectories([dirArray]) {
+  for (let i = 0; i < dirArray; i++) {
+    await mkdir(dirArray[i]);
+  }
+}
 
 async function createMultipleFiles(folder, fileName, n, fileExtension) {
   const directory = folder + "/";
@@ -101,6 +108,7 @@ function cleanDirectory(directory) {
       //do nth
     }
     for (const file of files) {
+      if (file === "must-not-be-empty.pptx") continue;
       fs.unlink(path.join(directory, file), (err) => {
         if (err) {
           //do nth
@@ -115,4 +123,5 @@ module.exports = {
   manipulate,
   getTotalNumberOfSlides,
   createMultipleFiles,
+  createDirectories,
 };
