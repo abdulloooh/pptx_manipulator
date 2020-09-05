@@ -64,28 +64,32 @@ async function getTotalNumberOfSlides(file, fileExtension) {
 
     fs.copyFile(file + fileExtension, garbageDir, async (err) => {
       console.log("utility 3");
-      if (err) return err.message;
+      if (err) {
+        console.log(err.message);
+        reject(err);
+      }
 
-      pptx.load(garbageDir).then(async () => {
-        let slideCount = 1;
-        while (slideCount) {
-          try {
-            console.log("utility 4");
+      pptx
+        .load(garbageDir)
+        .then(async () => {
+          let slideCount = 1;
+          while (slideCount) {
+            try {
+              console.log("utility 4");
 
-            await pptx.compose((pres) => {
-              pres.removeSlide(pres.getSlide(slideCount));
-              slideCount = slideCount + 1;
-            });
-          } catch (ex) {
-            cleanDirectory("garbage");
-            resolve(slideCount - 1);
-            break;
+              await pptx.compose((pres) => {
+                pres.removeSlide(pres.getSlide(slideCount));
+                slideCount = slideCount + 1;
+              });
+            } catch (ex) {
+              cleanDirectory("garbage");
+              resolve(slideCount - 1);
+              break;
+            }
           }
-        }
-      });
+        })
+        .catch((err) => console.log(err.message));
     });
-
-    console.log("utility 6");
   });
 }
 
